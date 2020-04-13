@@ -32,10 +32,10 @@ setup(
     author="PASTA+ project",
     url="https://github.com/PASTAplus/datapress",
     license=full_license,
-    packages=find_packages(where="src"),
+    packages=find_packages(where="webapp"),
     include_package_data=True,
     exclude_package_data={"": ["settings.py, properties.py, config.py"],},
-    package_dir={"": "src"},
+    package_dir={"": "webapp"},
     python_requires=">3.8.*",
     install_requires=[
         "click >= 7.1.1",
