@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-:Mod: __initi__
+:Mod: __init__
 
 :Synopsis:
 
