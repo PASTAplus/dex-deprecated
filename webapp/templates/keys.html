@@ -1,0 +1,19 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}
+        {{ title }}
+    {% else %}
+        Keys
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <ol>
+        {% for key in keys %}
+            <li>{{ key }}</li>
+        {% endfor %}
+    </ol>
+</div>
+{%  endblock content %}

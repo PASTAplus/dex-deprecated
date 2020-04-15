@@ -1,0 +1,15 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+    {% if title %}
+        {{ title }}
+    {% else %}
+        Head
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {{ head|safe }}
+</div>
+{%  endblock content %}
