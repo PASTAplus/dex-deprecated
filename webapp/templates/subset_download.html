@@ -18,6 +18,8 @@
 
         <h4>Preview:</h4>
         {{ table|safe }}
+
+        <button onclick="window.location.href='{{ url_for("download") }}';">Download</button>
     {%  endblock app_content %}
 
 </div>

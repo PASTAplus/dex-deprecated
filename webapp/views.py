@@ -15,9 +15,10 @@
 import json
 import logging
 import os
+import uuid
 
 import daiquiri
-from flask import Flask, render_template, session
+from flask import Flask, render_template, send_file, session
 from flask_bootstrap import Bootstrap
 from requests.structures import CaseInsensitiveDict
 import requests
@@ -52,8 +53,8 @@ def info():
     key = session["key"]
     entity = json.loads(key)
     p = Press(entity)
-    head = "http://localhost:5000/head"
-    stats = "http://localhost:5000/stats"
+    head = f"{Config.HOST}/head"
+    stats = f"{Config.HOST}/stats"
     return render_template("info.html", h=head, s=stats, p=p)
 
 
@@ -73,8 +74,8 @@ def index(purl: str = None):
             session["key"] = key
             entity = json.loads(key)
             p = Press(entity)
-            head = "http://localhost:5000/head"
-            stats = "http://localhost:5000/stats"
+            head = f"{Config.HOST}/head"
+            stats = f"{Config.HOST}/stats"
             return render_template("info.html", h=head, s=stats, p=p)
 
     return "Got it!"
@@ -106,9 +107,6 @@ def stats():
     return render_template("table.html", table=table)
 
 
-@app.route("/")
-
-
 @app.route("/subset", methods=['GET', 'POST'])
 def subset():
     key = session["key"]
@@ -135,6 +133,18 @@ def subset():
     return ""
 
 
+@app.route("/download")
+def download():
+    key = session.get("key")
+    entity = json.loads(key)
+    p = Press(entity)
+    file_path = p.file_path + "/subset.csv"
+    return send_file(file_path,
+                     mimetype="text/csv",
+                     as_attachment=True,
+                     attachment_filename="subset.csv")
+
+
 @app.route("/view")
 def view():
     file_spec = session.get("key")
@@ -142,7 +152,7 @@ def view():
 
 
 def get_file_name(headers: CaseInsensitiveDict) -> str:
-    file_name = None
+    file_name = str(uuid.uuid4()) + ".csv"
     content_disposition = headers.get("Content-Disposition")
     if content_disposition is not None:
         if "attachment;" in content_disposition:

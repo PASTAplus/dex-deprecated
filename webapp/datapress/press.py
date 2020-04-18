@@ -12,6 +12,8 @@
 :Created:
     4/12/20
 """
+from pathlib import PurePath
+
 import pandas as pd
 
 
@@ -19,6 +21,7 @@ class Press:
     def __init__(self, entity: dict):
         self._file_spec = entity["file_spec"]
         self._file_name = entity["file_name"]
+        self._file_path = str(PurePath(self._file_spec).parent)
         self._purl = entity["purl"]
         self._df = pd.read_csv(self._file_spec)
         self._head = get_head(self._df)
@@ -28,6 +31,7 @@ class Press:
         self._stats = get_stats(self._df)
         self._rows = self._shape[0]
         self._cols = self._shape[1]
+        _ = PurePath(self._file_spec)
 
     @property
     def cols(self):
@@ -40,6 +44,10 @@ class Press:
     @property
     def file_name(self):
         return self._file_name
+
+    @property
+    def file_path(self):
+        return self._file_path
 
     @property
     def file_spec(self):
@@ -71,7 +79,7 @@ class Press:
 
     def subset(self, columns: list, r_start: int, r_end: int):
         df = self._df.iloc[r_start:r_end + 1, columns]
-        _ = df.shape
+        df.to_csv(self._file_path + "/subset.csv", index=False, header=True)
         return df
 
 
