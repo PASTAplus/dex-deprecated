@@ -4,12 +4,12 @@
     {% if title %}
         {{ title }}
     {% else %}
-        Head
+        Table
     {% endif %}
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    {{ head|safe }}
+    {{ table|safe }}
 </div>
 {%  endblock content %}

@@ -1,11 +1,78 @@
 {% extends 'bootstrap/base.html' %}
 
 {% block title %}
-    {% if title %}
-        {{ title }}
-    {% else %}
-        DataPress
-    {% endif %}
+{% if title %}{{ title }} - EDI DataPress{% endif %}
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button aria-controls="navbar" aria-expanded="false"
+                    class="navbar-toggle collapsed" data-target="#top-navbar"
+                    data-toggle="collapse" type="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('info') }}">DataPress</a>
+        </div>
+        <div class="navbar-collapse collapse" id="top-navbar">
+            <ul class="nav navbar-nav">
+                <li class="nav-item">
+                    <a href="{{ url_for('info') }}" title="Info">Preview</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('subset') }}" title="Subset">Subset</a>
+                </li>
+{#                <li class="dropdown">#}
+{#                    <a aria-expanded="false" aria-haspopup="true"#}
+{#                       class="dropdown-toggle" data-toggle="dropdown" href="#"#}
+{#                       role="button">Plotting#}
+{#                        <span class="caret"></span>#}
+{#                    </a>#}
+{#                    <ul class="dropdown-menu">#}
+{#                        <li>#}
+{#                            <a href="{{ url_for('plotxy') }}">#}
+{#                                Plot XY#}
+{#                            </a>#}
+{#                        </li>#}
+{#                        <li>#}
+{#                            <a href="{{ url_for('plotts') }}">#}
+{#                                Plot Time-series#}
+{#                            </a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                </li>#}
+{#                <li class="dropdown">#}
+{#                    <a aria-expanded="false" aria-haspopup="true"#}
+{#                       class="dropdown-toggle" data-toggle="dropdown" href="#"#}
+{#                       role="button">Modify#}
+{#                        <span class="caret"></span>#}
+{#                    </a>#}
+{#                    <ul class="dropdown-menu">#}
+{#                        <li>#}
+{#                            <a href="{{ url_for('slicerows') }}">#}
+{#                                Rows#}
+{#                            </a>#}
+{#                        </li>#}
+{#                        <li>#}
+{#                            <a href="{{ url_for('slicecols') }}">#}
+{#                                Columns#}
+{#                            </a>#}
+{#                        </li>#}
+{#                        <li>#}
+{#                            <a href="{{ url_for('slicerowscols') }}">#}
+{#                                Rows and Columns#}
+{#                            </a>#}
+{#                        </li>#}
+{#                   </ul>#}
+{#                </li>#}
+            </ul>
+        </div>
+    </div>
+</nav>
 {% endblock %}
 
 {% block content %}

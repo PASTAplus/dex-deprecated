@@ -23,7 +23,9 @@ from requests.structures import CaseInsensitiveDict
 import requests
 
 from webapp.config import Config
+from webapp.forms import Subset
 from webapp.datapress import datatable
+from webapp.datapress import press
 from webapp.datapress.press import Press
 
 
@@ -47,8 +49,12 @@ def clean():
 
 @app.route("/info")
 def info():
-    file_spec = session.get("key")
-    return render_template("info.html")
+    key = session["key"]
+    entity = json.loads(key)
+    p = Press(entity)
+    head = "http://localhost:5000/head"
+    stats = "http://localhost:5000/stats"
+    return render_template("info.html", h=head, s=stats, p=p)
 
 
 @app.route("/<path:purl>")
@@ -67,8 +73,9 @@ def index(purl: str = None):
             session["key"] = key
             entity = json.loads(key)
             p = Press(entity)
-            h = "http://localhost:5000/head"
-            return render_template("info.html", h=h, p=p)
+            head = "http://localhost:5000/head"
+            stats = "http://localhost:5000/stats"
+            return render_template("info.html", h=head, s=stats, p=p)
 
     return "Got it!"
 
@@ -78,8 +85,8 @@ def head():
     key = session.get("key")
     entity = json.loads(key)
     p = Press(entity)
-    h = p.head
-    return render_template("head.html", head=h)
+    table = p.head
+    return render_template("table.html", table=table)
 
 
 @app.route("/keys")
@@ -88,6 +95,44 @@ def keys():
     p = Press(file_spec)
     k = p.keys
     return render_template("keys.html", keys=k)
+
+
+@app.route("/stats")
+def stats():
+    key = session.get("key")
+    entity = json.loads(key)
+    p = Press(entity)
+    table = p.stats
+    return render_template("table.html", table=table)
+
+
+@app.route("/")
+
+
+@app.route("/subset", methods=['GET', 'POST'])
+def subset():
+    key = session["key"]
+    entity = json.loads(key)
+    p = Press(entity)
+    choices = list()
+    no = 0
+    for key in p.keys:
+        choices.append((no, key))
+        no += 1
+    form = Subset()
+    form.attributes.choices = choices
+    if form.validate_on_submit():
+        columns = form.attributes.data
+        r_start = form.row_start.data
+        r_end = form.row_end.data
+        df = p.subset(columns, r_start, r_end)
+        table = press.get_head(df, 5)
+        return render_template("subset_download.html", df=df, table=table)
+    else:
+        form.row_start.data = 0
+        form.row_end.data = p.rows
+        return render_template("subset.html", form=form, p=p)
+    return ""
 
 
 @app.route("/view")

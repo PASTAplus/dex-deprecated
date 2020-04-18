@@ -21,9 +21,17 @@ class Press:
         self._file_name = entity["file_name"]
         self._purl = entity["purl"]
         self._df = pd.read_csv(self._file_spec)
-        self._head = self._get_head()
+        self._head = get_head(self._df)
         self._keys = self._df.keys()
         self._dtypes = self._df.dtypes.items()
+        self._shape = self._df.shape
+        self._stats = get_stats(self._df)
+        self._rows = self._shape[0]
+        self._cols = self._shape[1]
+
+    @property
+    def cols(self):
+        return self._cols
 
     @property
     def dtypes(self):
@@ -49,9 +57,39 @@ class Press:
     def purl(self):
         return self._purl
 
-    def _get_head(self) -> str:
-        html = self._df.head(n=20).to_html()
-        html = html.replace("<td>", "<td style='text-align: center'>")
-        html = html.replace("<table border=\"1\" class=\"dataframe\">",
-                            "<table class='table'>")
-        return html
+    @property
+    def rows(self):
+        return self._rows
+
+    @property
+    def shape(self):
+        return self._shape
+
+    @property
+    def stats(self):
+        return self._stats
+
+    def subset(self, columns: list, r_start: int, r_end: int):
+        df = self._df.iloc[r_start:r_end + 1, columns]
+        _ = df.shape
+        return df
+
+
+def get_head(df, n=20) -> str:
+    raw = df.head(n).to_html()
+    html = htmlify(raw)
+    return html
+
+
+def get_stats(df) -> str:
+    raw = df.describe().to_html()
+    html = htmlify(raw)
+    return html
+
+
+def htmlify(raw: str) -> str:
+    html = raw
+    html = html.replace("<td>", "<td style='text-align: center'>")
+    html = html.replace("<table border=\"1\" class=\"dataframe\">",
+                        "<table class='table'>")
+    return html
