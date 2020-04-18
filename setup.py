@@ -24,7 +24,7 @@ with open(path.join(here, 'LICENSE'), encoding='utf-8') as f:
     full_license = f.read()
 
 setup(
-    name="datapress",
+    name="dex",
     version="2020.04.12",
     description="Manipulate data tables to produce new data tables",
     long_description=long_description,
@@ -43,7 +43,7 @@ setup(
         "numpy >= 1.18.1",
         "pandas >= 1.0.3",
         ],
-    entry_points={"console_scripts": ["press=datapress.press:main"]},
+    entry_points={"console_scripts": ["press=dex.press:main"]},
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
     ],

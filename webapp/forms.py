@@ -22,7 +22,7 @@ from wtforms import StringField
 from wtforms.validators import DataRequired
 from wtforms.validators import Optional
 
-from webapp.datapress.press import Press
+from webapp.dex.dobject import Dobject
 
 
 class Subset(FlaskForm):

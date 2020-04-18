@@ -25,9 +25,9 @@ import requests
 
 from webapp.config import Config
 from webapp.forms import Subset
-from webapp.datapress import datatable
-from webapp.datapress import press
-from webapp.datapress.press import Press
+from webapp.dex import datatable
+from webapp.dex import dobject
+from webapp.dex.dobject import Dobject
 
 
 cwd = os.path.dirname(os.path.realpath(__file__))
@@ -52,10 +52,10 @@ def clean():
 def info():
     key = session["key"]
     entity = json.loads(key)
-    p = Press(entity)
+    dobj = Dobject(entity)
     head = f"{Config.HOST}/head"
     stats = f"{Config.HOST}/stats"
-    return render_template("info.html", h=head, s=stats, p=p)
+    return render_template("info.html", h=head, s=stats, dobj=dobj)
 
 
 @app.route("/<path:purl>")
@@ -73,10 +73,10 @@ def index(purl: str = None):
                    f'"purl": "{purl}"}}')
             session["key"] = key
             entity = json.loads(key)
-            p = Press(entity)
+            dobj = Dobject(entity)
             head = f"{Config.HOST}/head"
             stats = f"{Config.HOST}/stats"
-            return render_template("info.html", h=head, s=stats, p=p)
+            return render_template("info.html", h=head, s=stats, dobj=dobj)
 
     return "Got it!"
 
@@ -85,16 +85,16 @@ def index(purl: str = None):
 def head():
     key = session.get("key")
     entity = json.loads(key)
-    p = Press(entity)
-    table = p.head
+    dobj = Dobject(entity)
+    table = dobj.head
     return render_template("table.html", table=table)
 
 
 @app.route("/keys")
 def keys():
     file_spec = session.get("key")
-    p = Press(file_spec)
-    k = p.keys
+    dobj = Dobject(file_spec)
+    k = dobj.keys
     return render_template("keys.html", keys=k)
 
 
@@ -102,8 +102,8 @@ def keys():
 def stats():
     key = session.get("key")
     entity = json.loads(key)
-    p = Press(entity)
-    table = p.stats
+    dobj = Dobject(entity)
+    table = dobj.stats
     return render_template("table.html", table=table)
 
 
@@ -111,10 +111,10 @@ def stats():
 def subset():
     key = session["key"]
     entity = json.loads(key)
-    p = Press(entity)
+    dobj = Dobject(entity)
     choices = list()
     no = 0
-    for key in p.keys:
+    for key in dobj.keys:
         choices.append((no, key))
         no += 1
     form = Subset()
@@ -123,13 +123,13 @@ def subset():
         columns = form.attributes.data
         r_start = form.row_start.data
         r_end = form.row_end.data
-        df = p.subset(columns, r_start, r_end)
-        table = press.get_head(df, 5)
+        df = dobj.subset(columns, r_start, r_end)
+        table = dobject.get_head(df, 5)
         return render_template("subset_download.html", df=df, table=table)
     else:
         form.row_start.data = 0
-        form.row_end.data = p.rows
-        return render_template("subset.html", form=form, p=p)
+        form.row_end.data = dobj.rows
+        return render_template("subset.html", form=form, dobj=dobj)
     return ""
 
 
@@ -137,8 +137,8 @@ def subset():
 def download():
     key = session.get("key")
     entity = json.loads(key)
-    p = Press(entity)
-    file_path = p.file_path + "/subset.csv"
+    dobj = Dobject(entity)
+    file_path = dobj.file_path + "/subset.csv"
     return send_file(file_path,
                      mimetype="text/csv",
                      as_attachment=True,

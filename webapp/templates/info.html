@@ -13,21 +13,21 @@
 
     {% block app_content %}
         <h4>Data File Name:</h4>
-        <p>{{ p.file_name }}</p>
+        <p>{{ dobj.file_name }}</p>
         <br/>
 
         <h4>Data URL:</h4>
-        <p><a href="{{ p.purl }}">{{ p.purl }}</a></p>
+        <p><a href="{{ dobj.purl }}">{{ dobj.purl }}</a></p>
         <br/>
 
         <h4>Table Dimensions:</h4>
-        {% set rows,cols = p.shape %}
+        {% set rows,cols = dobj.shape %}
         <p>Rows: {{ rows }}, Cols: {{ cols }}</p>
         <br/>
 
         <h4>Table Attributes:</h4>
         <ol>
-        {% for key,type in p.dtypes %}
+        {% for key,type in dobj.dtypes %}
                 <li>{{ key }}: {{ type }}</li>
         {% endfor %}
         </ol>

@@ -17,7 +17,7 @@ from pathlib import PurePath
 import pandas as pd
 
 
-class Press:
+class Dobject:
     def __init__(self, entity: dict):
         self._file_spec = entity["file_spec"]
         self._file_name = entity["file_name"]
