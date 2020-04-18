@@ -124,14 +124,27 @@ def subset():
         r_start = form.row_start.data
         r_end = form.row_end.data
         df = dobj.subset(columns, r_start, r_end)
-        table = dobject.get_head(df, 5)
-        return render_template("subset_download.html", df=df, table=table)
+        table = dobject.get_head(df, 20)
+        with open(dobj.file_path + "/subset.tbl", "w") as f:
+            f.write(table)
+        head = f"{Config.HOST}/subset_head"
+        return render_template("subset.html", df=df, h=head)
     else:
         form.row_start.data = 0
         form.row_end.data = dobj.rows
-        return render_template("subset.html", form=form, dobj=dobj)
+        return render_template("subset_form.html", form=form, dobj=dobj)
     return ""
 
+
+@app.route("/subset_head")
+def subset_head():
+    key = session.get("key")
+    entity = json.loads(key)
+    dobj = Dobject(entity)
+    file_path = dobj.file_path
+    with open(file_path + "/subset.tbl", "r") as f:
+        table = f.read()
+    return render_template("table.html", table=table)
 
 @app.route("/download")
 def download():

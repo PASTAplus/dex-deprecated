@@ -1,9 +1,7 @@
 {% extends "base.html" %}
-{% import 'bootstrap/wtf.html' as wtf %}
 
 {% block content %}
 <div class="container">
-
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     {% for message in messages %}
@@ -14,20 +12,18 @@
     {% endwith %}
 
     {% block app_content %}
-        <h3>Subset Data Table</h3>
-        <div class="row">
-            <div class="col-md-4">
-                <form method="POST" action="" class="form" role="form">
-                    {{ form.csrf_token }}
-                    {{ wtf.form_field(form.attributes) }}
-                    {{ wtf.form_field(form.row_start) }}
-                    {{ wtf.form_field(form.row_end) }}
-                    <input class="btn btn-primary" type="submit" value="Submit"/>
-                    <input class="btn btn-primary" type="reset" value="Clear"/>
-                </form>
-            </div>
-        </div>
-    {% endblock app_content %}
+        <h4>Table Dimensions:</h4>
+        <p>Rows: {{ df.shape[0] }}, Cols: {{ df.shape[1] }}</p>
+        <br/>
+
+        <h4>Preview:</h4>
+        <p>
+            <iframe src="{{ h }}" style="height:400px;width:800px;"></iframe>
+        </p>
+        <br/>
+
+        <button onclick="window.location.href='{{ url_for("download") }}';">Download</button>
+    {%  endblock app_content %}
 
 </div>
 {%  endblock content %}
