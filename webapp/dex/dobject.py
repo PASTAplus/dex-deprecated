@@ -82,6 +82,12 @@ class Dobject:
         df.to_csv(self._file_path + "/subset.csv", index=False, header=True)
         return df
 
+    def plot(self, columns: list, date_x: bool):
+        df = self._df.iloc[:, columns]
+        if date_x:
+            df[df.keys()[0]] = pd.to_datetime(df[df.keys()[0]])
+        return df
+
 
 def get_head(df, n=20) -> str:
     raw = df.head(n).to_html()

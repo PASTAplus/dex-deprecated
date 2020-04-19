@@ -17,6 +17,8 @@ import logging
 import os
 import uuid
 
+from bokeh.plotting import figure, output_file, save, show
+from bokeh.models import ColumnDataSource
 import daiquiri
 from flask import Flask, render_template, send_file, session
 from flask_bootstrap import Bootstrap
@@ -24,6 +26,7 @@ from requests.structures import CaseInsensitiveDict
 import requests
 
 from webapp.config import Config
+from webapp.forms import Plot
 from webapp.forms import Subset
 from webapp.dex import datatable
 from webapp.dex import dobject
@@ -98,6 +101,32 @@ def keys():
     return render_template("keys.html", keys=k)
 
 
+@app.route("/plot", methods=['GET', 'POST'])
+def plot():
+    key = session["key"]
+    entity = json.loads(key)
+    dobj = Dobject(entity)
+    choices = list()
+    no = 0
+    for key in dobj.keys:
+        choices.append((no, key))
+        no += 1
+    form = Plot()
+    form.x_attr.choices = choices
+    form.y_attr.choices = choices
+    if form.validate_on_submit():
+        x_attr = form.x_attr.data
+        date_x = form.x_date.data
+        y_attr = form.y_attr.data
+        df = dobj.plot([x_attr, y_attr], date_x)
+        file_name = str(uuid.uuid4()) + ".html"
+        file_spec = Config.ROOT_DIR + "/static/" + file_name
+        plot_xy(df, date_x, file_spec)
+        return render_template("plot.html", f=file_name)
+    else:
+        return render_template("plot_form.html", form=form, dobj=dobj)
+
+
 @app.route("/stats")
 def stats():
     key = session.get("key")
@@ -133,7 +162,6 @@ def subset():
         form.row_start.data = 0
         form.row_end.data = dobj.rows
         return render_template("subset_form.html", form=form, dobj=dobj)
-    return ""
 
 
 @app.route("/subset_head")
@@ -145,6 +173,7 @@ def subset_head():
     with open(file_path + "/subset.tbl", "r") as f:
         table = f.read()
     return render_template("table.html", table=table)
+
 
 @app.route("/download")
 def download():
@@ -172,6 +201,19 @@ def get_file_name(headers: CaseInsensitiveDict) -> str:
             fn_directive = content_disposition.split(" ")[1]
             file_name = fn_directive.split("=")[1]
     return file_name
+
+
+def plot_xy(df, date_x: bool, file_spec: str):
+    output_file(file_spec)
+    if date_x:
+        p = figure(x_axis_type='datetime')
+    else:
+        p = figure()
+    p.xaxis.axis_label = df.keys()[0]
+    p.yaxis.axis_label = df.keys()[1]
+    source = ColumnDataSource(df)
+    p.circle(x=df.keys()[0], y=df.keys()[1], source=source)
+    save(p)
 
 
 if __name__ == "__main__":

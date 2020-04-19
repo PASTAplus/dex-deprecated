@@ -29,3 +29,9 @@ class Subset(FlaskForm):
     attributes = SelectMultipleField("Attributes", coerce=int)
     row_start = IntegerField("Row Start")
     row_end = IntegerField("Row End")
+
+
+class Plot(FlaskForm):
+    x_attr = SelectField("X Attribute", coerce=int)
+    x_date = BooleanField("X is date")
+    y_attr = SelectField("Y Attribute", coerce=int)
