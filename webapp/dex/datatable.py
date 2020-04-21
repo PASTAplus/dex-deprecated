@@ -16,7 +16,12 @@ import os
 import shutil
 import uuid
 
+import daiquiri
+
 from webapp.config import Config
+
+
+logger = daiquiri.getLogger(__name__)
 
 
 def write(file_path: str, file_name: str, table: str) -> str:
@@ -26,6 +31,7 @@ def write(file_path: str, file_name: str, table: str) -> str:
     file_spec = f"{path_spec}/{file_name}"
     with open(file_spec, "w") as f:
         f.write(table)
+    logger.info(f"Created data file: {file_spec}")
     return file_spec
 
 
