@@ -17,8 +17,6 @@ import logging
 import os
 import uuid
 
-from bokeh.plotting import figure, output_file, save, show
-from bokeh.models import ColumnDataSource
 import daiquiri
 from flask import Flask, render_template, send_file, session
 from flask_bootstrap import Bootstrap
@@ -31,6 +29,7 @@ from webapp.forms import Subset
 from webapp.dex import datatable
 from webapp.dex import dobject
 from webapp.dex.dobject import Dobject
+from webapp.dex import dplot
 
 
 cwd = os.path.dirname(os.path.realpath(__file__))
@@ -121,7 +120,7 @@ def plot():
         df = dobj.plot([x_attr, y_attr], date_x)
         file_name = str(uuid.uuid4()) + ".html"
         file_spec = Config.ROOT_DIR + "/static/" + file_name
-        plot_xy(df, date_x, file_spec)
+        dplot.plot_xy(df, date_x, file_spec)
         return render_template("plot.html", f=file_name)
     else:
         return render_template("plot_form.html", form=form, dobj=dobj)
@@ -201,19 +200,6 @@ def get_file_name(headers: CaseInsensitiveDict) -> str:
             fn_directive = content_disposition.split(" ")[1]
             file_name = fn_directive.split("=")[1]
     return file_name
-
-
-def plot_xy(df, date_x: bool, file_spec: str):
-    output_file(file_spec)
-    if date_x:
-        p = figure(x_axis_type='datetime')
-    else:
-        p = figure()
-    p.xaxis.axis_label = df.keys()[0]
-    p.yaxis.axis_label = df.keys()[1]
-    source = ColumnDataSource(df)
-    p.circle(x=df.keys()[0], y=df.keys()[1], source=source)
-    save(p)
 
 
 if __name__ == "__main__":
