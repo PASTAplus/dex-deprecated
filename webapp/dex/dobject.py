@@ -16,6 +16,11 @@ from pathlib import PurePath
 
 import pandas as pd
 
+import daiquiri
+
+
+logger = daiquiri.getLogger(__name__)
+
 
 class Dobject:
     def __init__(self, entity: dict):
