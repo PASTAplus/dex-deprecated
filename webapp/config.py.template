@@ -26,3 +26,4 @@ class Config(object):
 
     HOST = "http://dex.edirepository.org"
     ROOT_DIR = "/tmp/dex"
+    STALE = 10
