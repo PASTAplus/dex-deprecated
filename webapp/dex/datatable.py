@@ -16,7 +16,7 @@ import os
 import shutil
 import uuid
 
-from config import Config
+from webapp.config import Config
 
 
 def write(file_path: str, file_name: str, table: str) -> str:
