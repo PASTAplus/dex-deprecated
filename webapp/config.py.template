@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+:Mod: config.py
+
+:Synopsis:
+
+:Author:
+    servilla
+
+:Created:
+    4/13/20
+"""
+
+
+class Config(object):
+
+    # Flask app configuration
+    SECRET_KEY = "SECRET_KEY"
+    DEBUG = False
+
+    PROD = "pasta.lternet.edu"
+    STAGE = "pasta-s.lternet.edu"
+    DEV = "pasta-d.lternet.edu"
+
+    HOST = "http://dex.edirepository.org"
+    ROOT_DIR = "/tmp/dex"
