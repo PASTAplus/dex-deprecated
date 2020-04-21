@@ -11,7 +11,7 @@
 :Created:
     4/20/2020
 """
-from webapp.run import app
+from webapp.views import app
 
 if __name__ == "__main__":
     app.run()
