@@ -15,6 +15,7 @@
 import json
 import logging
 import os
+from pathlib import Path
 import uuid
 
 import daiquiri
@@ -54,6 +55,7 @@ def clean():
 def info():
     key = session["key"]
     entity = json.loads(key)
+    touch(entity["file_spec"])
     dobj = Dobject(entity)
     head = f"{Config.HOST}/head"
     stats = f"{Config.HOST}/stats"
@@ -87,6 +89,7 @@ def index(purl: str = None):
 def head():
     key = session.get("key")
     entity = json.loads(key)
+    touch(entity["file_spec"])
     dobj = Dobject(entity)
     table = dobj.head
     return render_template("table.html", table=table)
@@ -104,6 +107,7 @@ def keys():
 def plot():
     key = session["key"]
     entity = json.loads(key)
+    touch(entity["file_spec"])
     dobj = Dobject(entity)
     choices = list()
     no = 0
@@ -130,6 +134,7 @@ def plot():
 def stats():
     key = session.get("key")
     entity = json.loads(key)
+    touch(entity["file_spec"])
     dobj = Dobject(entity)
     table = dobj.stats
     return render_template("table.html", table=table)
@@ -139,6 +144,7 @@ def stats():
 def subset():
     key = session["key"]
     entity = json.loads(key)
+    touch(entity["file_spec"])
     dobj = Dobject(entity)
     choices = list()
     no = 0
@@ -167,6 +173,7 @@ def subset():
 def subset_head():
     key = session.get("key")
     entity = json.loads(key)
+    touch(entity["file_spec"])
     dobj = Dobject(entity)
     file_path = dobj.file_path
     with open(file_path + "/subset.tbl", "r") as f:
@@ -178,6 +185,7 @@ def subset_head():
 def download():
     key = session.get("key")
     entity = json.loads(key)
+    touch(entity["file_spec"])
     dobj = Dobject(entity)
     file_path = dobj.file_path + "/subset.csv"
     return send_file(file_path,
@@ -188,8 +196,8 @@ def download():
 
 @app.route("/view")
 def view():
-    file_spec = session.get("key")
-    return f"Session name: {file_spec}"
+    key = session.get("key")
+    return f"Session name: {key}"
 
 
 def get_file_name(headers: CaseInsensitiveDict) -> str:
@@ -200,6 +208,12 @@ def get_file_name(headers: CaseInsensitiveDict) -> str:
             fn_directive = content_disposition.split(" ")[1]
             file_name = fn_directive.split("=")[1]
     return file_name
+
+
+def touch(file_spec: str):
+    _ = file_spec.lstrip(Config.ROOT_DIR)
+    unique = _.split("/")[0]
+    Path(f"{Config.ROOT_DIR}/{unique}").touch(exist_ok=True)
 
 
 if __name__ == "__main__":
