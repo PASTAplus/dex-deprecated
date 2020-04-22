@@ -81,8 +81,10 @@ def index(purl: str = None):
             head = f"{Config.HOST}/head"
             stats = f"{Config.HOST}/stats"
             return render_template("info.html", h=head, s=stats, dobj=dobj)
+        else:
+            return f"Data not found at URL: {purl}", 404
 
-    return "Got it!"
+    return "No data link provided in request!", 400
 
 
 @app.route("/head")
