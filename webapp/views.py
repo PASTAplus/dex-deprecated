@@ -44,13 +44,6 @@ app.config.from_object(Config)
 bootstrap = Bootstrap(app)
 
 
-@app.route("/clean")
-def clean():
-    file_spec = session.get("key")
-    datatable.remove(file_spec)
-    return "None"
-
-
 @app.route("/info")
 def info():
     key = session["key"]
