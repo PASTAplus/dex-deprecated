@@ -5,6 +5,7 @@
 :Mod: __init__
 
 :Synopsis:
+    Initialize webapp, including working directories (see Config.ROOT_DIR).
 
 :Author:
     servilla
