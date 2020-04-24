@@ -38,16 +38,22 @@ def dispose():
     os.chdir(Config.ROOT_DIR)
     p = Path(".")
     for child in p.iterdir():
-        if child.name == "static":
-            shutil.rmtree(child, ignore_errors=True)
-            logger.warning(f"Removed directory: {child}")
-        else:
+        if child.name != "static":
             stat = Path(child).stat()
             mod_time = pendulum.from_timestamp(stat.st_ctime)
             time_delta = now.diff(mod_time).in_minutes()
             if time_delta > Config.STALE:
                 shutil.rmtree(child, ignore_errors=True)
                 logger.warning(f"Removed directory: {child}")
+    p = Path("static")
+    for child in p.iterdir():
+        stat = Path(child).stat()
+        mod_time = pendulum.from_timestamp(stat.st_ctime)
+        time_delta = now.diff(mod_time).in_minutes()
+        if time_delta > Config.STALE:
+            Path(child).unlink(missing_ok=True)
+            logger.warning(f"Removed static file: {child}")
+
 
 
 def main():
