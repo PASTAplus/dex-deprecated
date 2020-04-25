@@ -35,8 +35,9 @@ from webapp.dex import dplot
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 logfile = cwd + "/views.log"
-daiquiri.setup(level=logging.INFO,
-               outputs=(daiquiri.output.File(logfile), "stdout",))
+daiquiri.setup(
+    level=logging.INFO, outputs=(daiquiri.output.File(logfile), "stdout",)
+)
 
 
 app = Flask(__name__)
@@ -66,8 +67,10 @@ def index(purl: str = None):
             file_path = purl[8:]
             table = r.text
             file_spec = datatable.write(file_path, file_name, table)
-            key = (f'{{"file_spec": "{file_spec}", "file_name": "{file_name}", '
-                   f'"purl": "{purl}"}}')
+            key = (
+                f'{{"file_spec": "{file_spec}", "file_name": "{file_name}", '
+                f'"purl": "{purl}"}}'
+            )
             session["key"] = key
             entity = json.loads(key)
             dobj = Dobject(entity)
@@ -98,7 +101,7 @@ def keys():
     return render_template("keys.html", keys=k)
 
 
-@app.route("/plot", methods=['GET', 'POST'])
+@app.route("/plot", methods=["GET", "POST"])
 def plot():
     key = session["key"]
     entity = json.loads(key)
@@ -135,7 +138,7 @@ def stats():
     return render_template("table.html", table=table)
 
 
-@app.route("/subset", methods=['GET', 'POST'])
+@app.route("/subset", methods=["GET", "POST"])
 def subset():
     key = session["key"]
     entity = json.loads(key)
@@ -183,10 +186,12 @@ def download():
     touch(entity["file_spec"])
     dobj = Dobject(entity)
     file_path = dobj.file_path + "/subset.csv"
-    return send_file(file_path,
-                     mimetype="text/csv",
-                     as_attachment=True,
-                     attachment_filename="subset.csv")
+    return send_file(
+        file_path,
+        mimetype="text/csv",
+        as_attachment=True,
+        attachment_filename="subset.csv",
+    )
 
 
 @app.route("/view")
