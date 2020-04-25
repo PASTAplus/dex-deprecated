@@ -27,8 +27,7 @@ from webapp.config import Config
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 logfile = cwd + "/gc.log"
-daiquiri.setup(level=logging.INFO,
-               outputs=(daiquiri.output.File(logfile),))
+daiquiri.setup(level=logging.INFO, outputs=(daiquiri.output.File(logfile),))
 logger = daiquiri.getLogger(__name__)
 
 
@@ -53,7 +52,6 @@ def dispose():
         if time_delta > Config.STALE:
             Path(child).unlink(missing_ok=True)
             logger.warning(f"Removed static file: {child}")
-
 
 
 def main():

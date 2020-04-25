@@ -55,7 +55,7 @@ class Dobject:
                 "shape": self._shape,
                 "stats": self._stats,
                 "rows": self._rows,
-                "cols": self._cols
+                "cols": self._cols,
             }
             with open(dobject_pkl, "wb") as f:
                 pickle.dump(dobject_dict, f)
@@ -106,7 +106,7 @@ class Dobject:
 
     def subset(self, columns: list, r_start: int, r_end: int):
         df = pd.read_csv(self._file_spec)
-        df = df.iloc[r_start:r_end + 1, columns]
+        df = df.iloc[r_start : r_end + 1, columns]
         df.to_csv(self._file_path + "/subset.csv", index=False, header=True)
         return df
 
@@ -133,6 +133,7 @@ def get_stats(df) -> str:
 def htmlify(raw: str) -> str:
     html = raw
     html = html.replace("<td>", "<td style='text-align: center'>")
-    html = html.replace("<table border=\"1\" class=\"dataframe\">",
-                        "<table class='table'>")
+    html = html.replace(
+        '<table border="1" class="dataframe">', "<table class='table'>"
+    )
     return html

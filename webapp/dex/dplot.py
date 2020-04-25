@@ -23,7 +23,7 @@ logger = daiquiri.getLogger(__name__)
 def plot_xy(df, date_x: bool, file_spec: str):
     output_file(file_spec)
     if date_x:
-        p = figure(x_axis_type='datetime')
+        p = figure(x_axis_type="datetime")
     else:
         p = figure()
     p.xaxis.axis_label = df.keys()[0]
