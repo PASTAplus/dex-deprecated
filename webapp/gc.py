@@ -22,7 +22,7 @@ import shutil
 import daiquiri
 import pendulum
 
-from webapp.config import Config
+from config import Config
 
 
 cwd = os.path.dirname(os.path.realpath(__file__))
@@ -40,7 +40,7 @@ def dispose():
     for child in p.iterdir():
         if child.name != "static":
             stat = Path(child).stat()
-            mod_time = pendulum.from_timestamp(stat.st_ctime)
+            mod_time = pendulum.from_timestamp(stat.st_mtime)
             time_delta = now.diff(mod_time).in_minutes()
             if time_delta > Config.STALE:
                 shutil.rmtree(child, ignore_errors=True)
@@ -53,7 +53,6 @@ def dispose():
         if time_delta > Config.STALE:
             Path(child).unlink(missing_ok=True)
             logger.warning(f"Removed static file: {child}")
-
 
 
 def main():
