@@ -27,8 +27,7 @@ from config import Config
 
 cwd = os.path.dirname(os.path.realpath(__file__))
 logfile = cwd + "/gc.log"
-daiquiri.setup(level=logging.INFO,
-               outputs=(daiquiri.output.File(logfile),))
+daiquiri.setup(level=logging.INFO, outputs=(daiquiri.output.File(logfile),))
 logger = daiquiri.getLogger(__name__)
 
 

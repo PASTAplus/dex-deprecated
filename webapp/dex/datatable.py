@@ -43,6 +43,6 @@ def read(file_spec: str) -> str:
 
 def remove(file_spec: str):
     os.chdir(Config.ROOT_DIR)
-    path_spec = file_spec[len(Config.ROOT_DIR) + 1:]
+    path_spec = file_spec[len(Config.ROOT_DIR) + 1 :]
     unique = path_spec.split("/")[0]
     shutil.rmtree(unique, ignore_errors=True)
