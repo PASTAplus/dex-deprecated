@@ -210,6 +210,15 @@ def get_file_name(headers: CaseInsensitiveDict) -> str:
     return file_name
 
 
+def get_package_id(purl: str) -> str:
+    path_frags = purl.split("/")
+    scope = path_frags[-4]
+    identifier = path_frags[-3]
+    revision = path_frags[-2]
+    package_id = f"{scope}.{identifier}.{revision}"
+    return package_id
+
+
 def touch(file_spec: str):
     _ = file_spec.lstrip(Config.ROOT_DIR)
     unique = _.split("/")[0]

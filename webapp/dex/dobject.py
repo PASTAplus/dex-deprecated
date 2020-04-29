@@ -18,6 +18,8 @@ import pickle
 import daiquiri
 import pandas as pd
 
+from webapp.dex.deml import Deml
+
 
 logger = daiquiri.getLogger(__name__)
 
@@ -28,6 +30,7 @@ class Dobject:
         self._file_name = entity["file_name"]
         self._file_path = str(PurePath(self._file_spec).parent)
         self._purl = entity["purl"]
+        deml = Deml(self._purl)
         dobject_pkl = self._file_path + "/dobject.pkl"
         if Path(dobject_pkl).exists():
             with open(dobject_pkl, "rb") as f:
