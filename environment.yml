@@ -17,6 +17,7 @@ dependencies:
   - cryptography=2.8
   - flask=1.1.1
   - freetype=2.9.1
+  - icu=58.2
   - idna=2.9
   - intel-openmp=2020.0
   - itsdangerous=1.1.0
@@ -30,6 +31,9 @@ dependencies:
   - libpng=1.6.37
   - libstdcxx-ng=9.1.0
   - libtiff=4.1.0
+  - libxml2=2.9.9
+  - libxslt=1.1.33
+  - lxml=4.5.0
   - markupsafe=1.1.1
   - mkl=2020.0
   - mkl-service=2.3.0
@@ -41,10 +45,11 @@ dependencies:
   - numpy=1.18.1
   - numpy-base=1.18.1
   - olefile=0.46
-  - openssl=1.1.1f
+  - openssl=1.1.1g
   - packaging=20.3
   - pandas=1.0.3
   - pathspec=0.7.0
+  - pendulum=2.1.0
   - pillow=7.0.0
   - pip=20.0.2
   - pluggy=0.13.1
@@ -57,6 +62,7 @@ dependencies:
   - python=3.8.2
   - python-dateutil=2.8.1
   - pytz=2019.3
+  - pytzdata=2019.3
   - pyyaml=5.3.1
   - readline=8.0
   - regex=2020.4.4
