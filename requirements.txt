@@ -15,7 +15,7 @@ Flask-Bootstrap==3.3.7.1
 Flask-WTF==0.14.3
 idna==2.9
 itsdangerous==1.1.0
-Jinja2==2.11.1
+Jinja2==2.11.3
 lxml==4.6.2
 MarkupSafe==1.1.1
 mkl-fft==1.0.15
